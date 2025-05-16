@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>الصفحة الرئيسية</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      overflow: hidden;
+    }
+
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .welcome-container {
+      background-color: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px 20px;
+      width: 280px;
+      margin: auto;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 15px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    a {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    a:hover {
+      background-color: #0056b3;
+    }
+
+    .language-select {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+      color: white;
+    }
+
+    .language-select select {
+      background: transparent;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .language-select option {
+      color: black;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- فيديو الخلفية -->
+  <video autoplay muted loop class="video-bg">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+
+  <!-- اختيار اللغة -->
+  <div class="language-select">
+    🌐
+    <select onchange="changeLanguage(this)">
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+      <option value="zh">中文</option>
+      <option value="ur">اردو</option>
+    </select>
+  </div>
+
+  <!-- محتوى الصفحة الرئيسية -->
+  <div class="welcome-container">
+    <h1 id="welcome-title">مرحباً، komar11!</h1>
+    <p id="success-msg">لقد تم تسجيل دخولك بنجاح.</p>
+    <a href="page3.html" id="back-btn">تسجيل الخروج</a>
+  </div>
+
+  <!-- جافاسكريبت -->
+  <script>
+    const translations = {
+      ar: {
+        title: "مرحباً، komar11!",
+        message: "لقد تم تسجيل دخولك بنجاح.",
+        back: "دخول"
+      },
+      en: {
+        title: "Welcome, komar11!",
+        message: "You have successfully logged in.",
+        back: "DONE"
+      },
+      fr: {
+        title: "Bienvenue, komar11!",
+        message: "Connexion réussie.",
+        back: "ENTRE"
+      },
+      zh: {
+        title: "欢迎，komar11！",
+        message: "您已成功登录。",
+        back: "DONE"
+      },
+      ur: {
+        title: "خوش آمدید، komar11!",
+        message: "آپ کامیابی سے لاگ ان ہو گئے ہیں۔",
+        back: "DONE"
+      }
+    };
+
+    function changeLanguage(selectElement) {
+      const lang = selectElement.value;
+      localStorage.setItem("language", lang);
+      applyLanguage(lang);
+    }
+
+    function applyLanguage(lang) {
+      const t = translations[lang] || translations["ar"];
+      document.getElementById("welcome-title").textContent = t.title;
+      document.getElementById("success-msg").textContent = t.message;
+      document.getElementById("back-btn").textContent = t.back;
+
+      // تعيين اتجاه النص حسب اللغة
+      document.body.style.direction = lang === "en" || lang === "fr" || lang === "zh" ? "ltr" : "rtl";
+    }
+
+    window.onload = function () {
+      const savedLang = localStorage.getItem("language") || "ar";
+      document.querySelector(".language-select select").value = savedLang;
+      applyLanguage(savedLang);
+    };
+  </script>
+</body>
+</html>

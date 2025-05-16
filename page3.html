@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>1xBet - تسجيل الدخول</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #003366, #0055aa);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      direction: rtl;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffcc;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      color: #333;
+      font-size: 16px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00cc66;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #00994d;
+    }
+
+    .links {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .links a {
+      color: #ffffffcc;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>تسجيل الدخول</h2>
+    <form onsubmit="login(event)">
+      <input type="text" placeholder="رقم الهاتف أو البريد الإلكتروني" required>
+      <input type="password" placeholder="كلمة المرور" required>
+      <button type="submit">دخول</button>
+    </form>
+    <div class="links">
+      <p><a href="#">نسيت كلمة المرور؟</a></p>
+      <p><a href="#">إنشاء حساب جديد</a></p>
+    </div>
+  </div>
+
+  <script>
+    function login(event) {
+      event.preventDefault();
+      alert("تم تسجيل الدخول (تجريبي)");
+    }
+  </script>
+
+</body>
+</html>
