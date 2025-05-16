@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>تسجيل الدخول</title>
+  <title>Page 3 - Trading Platform</title>
+
+  <!-- خط عصري -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+
   <style>
     body, html {
-      height: 100%;
       margin: 0;
-      font-family: Arial, sans-serif;
-      direction: rtl;
+      height: 100%;
       overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+      direction: rtl;
     }
 
     .video-bg {
@@ -23,201 +27,207 @@
       z-index: -1;
     }
 
-    .login-container {
-      background-color: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border-radius: 16px;
-      padding: 25px 20px;
-      width: 280px;
-      margin: auto;
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      color: white;
-      text-align: center;
-    }
-
-    .login-container h2 {
-      margin-bottom: 20px;
-    }
-
-    .input-field {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      background-color: rgba(255, 255, 255, 0.8);
-    }
-
-    .login-button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .login-button:hover {
-      background-color: #0056b3;
-    }
-
-    .signup-text {
-      margin-top: 15px;
-    }
-
-    .signup-link {
-      color: white;
-      font-weight: bold;
-      text-decoration: none;
-      margin-right: 5px;
-    }
-
-    .language-select {
+    .top-bar {
       position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: rgba(255, 255, 255, 0.2);
-      border: none;
-      border-radius: 8px;
-      padding: 8px;
-      color: white;
+      top: 10px;
+      right: 20px;
+      color: #00ff66;
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 10;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 6px 14px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 255, 102, 0.5);
+      font-family: 'Roboto', sans-serif;
+      letter-spacing: 1px;
     }
 
-    .language-select select {
-      background: transparent;
-      color: white;
+    .settings-menu {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      z-index: 10;
+    }
+
+    .settings-button {
+      background-color: rgba(255, 255, 255, 0.2);
       border: none;
-      font-weight: bold;
+      color: white;
+      font-size: 16px;
+      padding: 8px 12px;
+      border-radius: 8px;
       cursor: pointer;
     }
 
-    .language-select option {
-      color: black;
+    .dropdown {
+      display: none;
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 8px;
+      min-width: 160px;
+      z-index: 11;
+    }
+
+    .dropdown a {
+      color: white;
+      padding: 10px 15px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown a:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .chart-container {
+      position: absolute;
+      top: 2cm;
+      bottom: 80px;
+      left: 10px;
+      right: 10px;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .back-link {
+      position: absolute;
+      bottom: 20px;
+      right: 50%;
+      transform: translateX(50%);
+      background-color: rgba(0, 0, 0, 0.4);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      text-decoration: none;
+      z-index: 10;
+    }
+
+    .back-link:hover {
+      background-color: rgba(255,255,255,0.2);
     }
   </style>
 </head>
 <body>
 
-  <!-- فيديو الخلفية -->
   <video autoplay muted loop class="video-bg">
     <source src="background.mp4" type="video/mp4">
   </video>
 
-  <!-- اختيار اللغة -->
-  <div class="language-select">
-    🌐
-    <select onchange="changeLanguage(this)">
-      <option value="ar">العربية</option>
-      <option value="en">English</option>
-      <option value="fr">Français</option>
-      <option value="zh">中文</option>
-      <option value="ur">اردو</option>
-    </select>
-  </div>
+  <div class="top-bar" id="topBar"></div>
 
-  <!-- واجهة تسجيل الدخول -->
-  <div class="login-container">
-    <h2 id="login-title">تسجيل الدخول</h2>
-    <input type="text" class="input-field" id="username" placeholder="اسم المستخدم أو الإيميل" />
-    <input type="password" class="input-field" id="password" placeholder="كلمة السر" />
-    <button class="login-button" id="login-button" onclick="checkLogin()">تسجيل الدخول</button>
-
-    <div class="signup-text">
-      <span id="no-account-text">ليس لديك حساب؟</span>
-      <a href="#" id="signup-link" class="signup-link" onclick="goToSignup()">إنشاء حساب</a>
+  <div class="settings-menu">
+    <button class="settings-button" onclick="toggleDropdown()" id="settingsBtn"></button>
+    <div class="dropdown" id="settingsDropdown">
+      <a href="page6.html" id="withdraw"></a>
+      <a href="page5.html" id="deposit"></a>
+      <a href="page7.html" id="changePassword"></a>
+      <a href="index.html" id="logout"></a>
     </div>
   </div>
 
-  <!-- جافاسكريبت -->
+  <div class="chart-container">
+    <div id="tradingview_chart" style="width: 100%; height: 100%;"></div>
+  </div>
+
+  <a href="index.html" class="back-link" id="backHome"></a>
+
   <script>
-    const texts = {
+    const lang = localStorage.getItem('language') || 'en';
+    document.documentElement.lang = lang;
+
+    const translations = {
       ar: {
-        loginTitle: "تسجيل الدخول",
-        username: "اسم المستخدم أو الإيميل",
-        password: "كلمة السر",
-        login: "تسجيل الدخول",
-        noAccount: "ليس لديك حساب؟",
-        signUp: "إنشاء حساب"
+        topBar: '9,628.06 USDT',
+        settingsBtn: 'الإعدادات',
+        withdraw: 'سحب',
+        deposit: 'إيداع',
+        changePassword: 'تغيير رمز الدفع',
+        logout: 'تسجيل الخروج',
+        backHome: 'تسجيل الخروج'
       },
       en: {
-        loginTitle: "Login",
-        username: "Username or Email",
-        password: "Password",
-        login: "Login",
-        noAccount: "Don't have an account?",
-        signUp: "Sign Up"
-      },
-      fr: {
-        loginTitle: "Connexion",
-        username: "Nom d'utilisateur ou e-mail",
-        password: "Mot de passe",
-        login: "Se connecter",
-        noAccount: "Vous n'avez pas de compte ?",
-        signUp: "Créer un compte"
+        topBar: '9,628.06 USDT',
+        settingsBtn: 'Settings',
+        withdraw: 'Withdraw',
+        deposit: 'Deposit',
+        changePassword: 'Change payment code',
+        logout: 'Log Out',
+        backHome: 'log out'
       },
       zh: {
-        loginTitle: "登录",
-        username: "用户名或邮箱",
-        password: "密码",
-        login: "登录",
-        noAccount: "还没有账户？",
-        signUp: "注册"
+        topBar: '9,628.06 USDT',
+        settingsBtn: '设置',
+        withdraw: '提现',
+        deposit: '存款',
+        changePassword: '更改密码',
+        logout: '登出',
+        backHome: '登出'
       },
       ur: {
-        loginTitle: "لاگ ان",
-        username: "صارف کا نام یا ای میل",
-        password: "پاسورڈ",
-        login: "لاگ ان",
-        noAccount: "اکاؤنٹ نہیں ہے؟",
-        signUp: "رجسٹر کریں"
+        topBar: '9,628.06 USDT',
+        settingsBtn: 'سیٹنگز',
+        withdraw: 'رقم نکالیں',
+        deposit: 'جمع کروائیں',
+        changePassword: 'پاس ورڈ تبدیل کریں',
+        logout: 'لاگ آؤٹ کریں',
+        backHome: 'لاگ آؤٹ کریں'
+      },
+      fr: {
+        topBar: '9,628.06 USDT',
+        settingsBtn: 'Paramètres',
+        withdraw: 'Retrait',
+        deposit: 'Dépôt',
+        changePassword: 'Changer code pin',
+        logout: 'Déconnexion',
+        backHome: 'Déconnexion'
       }
     };
 
-    function changeLanguage(selectElement) {
-      const lang = selectElement.value;
-      localStorage.setItem("language", lang); // حفظ اللغة المختارة
-      applyLanguage(lang); // تطبيق اللغة المختارة
+    const t = translations[lang] || translations.en;
+    document.getElementById('topBar').textContent = t.topBar;
+    document.getElementById('settingsBtn').textContent = t.settingsBtn;
+    document.getElementById('withdraw').textContent = t.withdraw;
+    document.getElementById('deposit').textContent = t.deposit;
+    document.getElementById('changePassword').textContent = t.changePassword;
+    document.getElementById('logout').textContent = t.logout;
+    document.getElementById('backHome').textContent = t.backHome;
+  </script>
+
+  <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    new TradingView.widget({
+      autosize: true,
+      symbol: "BINANCE:ETHUSDT",
+      interval: "1",
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",
+      locale: lang === 'ur' ? 'en' : lang,
+      toolbar_bg: "#f1f3f6",
+      enable_publishing: false,
+      hide_side_toolbar: false,
+      container_id: "tradingview_chart"
+    });
+
+    function toggleDropdown() {
+      const dropdown = document.getElementById("settingsDropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
     }
 
-    function applyLanguage(lang) {
-      const t = texts[lang] || texts["ar"];
-      document.getElementById("login-title").textContent = t.loginTitle;
-      document.getElementById("username").placeholder = t.username;
-      document.getElementById("password").placeholder = t.password;
-      document.getElementById("login-button").textContent = t.login;
-      document.getElementById("no-account-text").textContent = t.noAccount;
-      document.getElementById("signup-link").textContent = t.signUp;
-
-      // تعيين اتجاه النص حسب اللغة
-      document.body.style.direction = lang === "en" || lang === "fr" || lang === "zh" ? "ltr" : "rtl";
-    }
-
-    function checkLogin() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-
-      if (username === "Komar11" && password === "komar1921@") {
-        window.location.href = "page2.html";
-      } else {
-        alert("اسم المستخدم أو كلمة السر غير صحيحة");
+    window.onclick = function(event) {
+      if (!event.target.matches('.settings-button')) {
+        const dropdown = document.getElementById("settingsDropdown");
+        if (dropdown.style.display === "block") {
+          dropdown.style.display = "none";
+        }
       }
-    }
-
-    function goToSignup() {
-      window.location.href = "page4.html";
-    }
-
-    window.onload = function () {
-      const savedLang = localStorage.getItem("language") || "ar"; // جلب اللغة المحفوظة
-      document.querySelector(".language-select select").value = savedLang;
-      applyLanguage(savedLang); // تطبيق اللغة المحفوظة
     };
   </script>
+
 </body>
 </html>
